@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Luxe Nails</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<style>
+body { margin:0; font-family:Arial, sans-serif; background:#0f0f10; color:white; }
+
+nav {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:15px 50px;
+  background:#141416;
+}
+
+.nav-links a { margin:0 12px; color:white; text-decoration:none; }
+
+.logo img { height:50px; }
+
+.hero iframe {
+  width:100%;
+  height:500px;
+  border:none;
+  display:block;
+}
+
+section {
+  padding:60px 50px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.section-title {
+  text-align:center;
+  margin:0 0 10px;
+  font-size:32px;
+  letter-spacing:1px;
+}
+
+.section-sub {
+  text-align:center;
+  color:#aaa;
+  margin:0 0 40px;
+  font-size:15px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.gallery {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:15px;
+}
+
+.gallery .tile {
+  position:relative;
+  overflow:hidden;
+  aspect-ratio:1/1;
+  background:#1a1a1c;
+  cursor:pointer;
+}
+
+.gallery .tile img {
+  width:100%; height:100%;
+  object-fit:cover;
+  transition:transform 0.5s ease;
+  display:block;
+}
+
+.gallery .tile:hover img { transform:scale(1.08); }
+
+.gallery .tile::after {
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+@media (max-width:900px){
+  .gallery { grid-template-columns:repeat(2, 1fr); }
+}
+
+.services-section { background:#141416; max-width:none; }
+
+.services-inner { max-width:1200px; margin:0 auto; }
+
+.service-group { margin-bottom:35px; }
+
+.group-title {
+  font-size:18px;
+  color:gold;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  border-bottom:1px solid #2a2a2c;
+  padding-bottom:8px;
+  margin-bottom:18px;
+}
+
+.service-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:10px 0;
+  border-bottom:1px dashed #26262a;
+  gap:12px;
+}
+
+.service-row:last-child { border-bottom:none; }
+
+.service-name { font-size:16px; }
+
+.service-name .desc { color:#888; font-size:13px; display:block; margin-top:2px; }
+
+.service-dots { flex:1; border-bottom:1px dotted #444; margin:0 10px; transform:translateY(-4px); }
+
+.service-price { color:gold; font-weight:bold; font-size:16px; white-space:nowrap; }
+
+.book-cta {
+  display:block;
+  width:fit-content;
+  margin:30px auto 0;
+  padding:14px 32px;
+  background:gold;
+  color:black;
+  text-decoration:none;
+  font-weight:bold;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.book-cta:hover { background:#e6c200; }
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">
+    <a href="index.html">
+      <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/nail-tech-logo-%281%29-design-template-10982053ba8b9b5f1ef10670c9d40346_screen.jpg?ts=1690067431">
+    </a>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="services.html">Book</a>
+    <a href="bookings.html">My Bookings</a>
+    <span id="adminLink"></span>
+    <span id="authNav"></span>
+  </div>
+</nav>
+
+<div class="hero">
+<iframe src="https://www.youtube.com/embed/vGMhop2eprk?autoplay=1&mute=1&controls=0&loop=1&playlist=vGMhop2eprk"></iframe>
+</div>
+
+<section>
+  <h2 class="section-title">Inspiration Gallery</h2>
+  <p class="section-sub">A peek at the looks we love</p>
+
+  <div class="gallery">
+    <div class="tile"><img src="https://www.byrdie.com/thmb/buMlOI4jQxZI2NSLrezikkpuiME=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/neutralanails_recirc-2d3a9cda11dd4d94be17a5fafff54880.jpg" alt="Neutral nails"></div>
+    <div class="tile"><img src="https://www.instyle.com/thmb/Q6mKesM2M1ZOPC_YySjOX1RyorY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/julygel-a771240c4caa48df8291633df78c621b.jpg" alt="Gel nails"></div>
+    <div class="tile"><img src="https://nz-website-media-r2-pub.gocheckin.net/1052-10024/page/gallery-Beautiful%20Nails%20Salon%20230326%20(4)-18.jpeg" alt="Beautiful nails salon work"></div>
+    <div class="tile"><img src="https://cdn.shopify.com/s/files/1/0019/1843/5381/files/10._Deep_Crimson_Pink_Orchid_Glam_Nails_-_Pretty_Nail_Ideas.jpg?v=1753949705" alt="Deep crimson glam nails"></div>
+  </div>
+</section>
+
+<section class="services-section">
+  <div class="services-inner">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Choose your moment of luxury</p>
+
+    <div class="service-group">
+      <div class="group-title">Manicures</div>
+      <div class="service-row"><div class="service-name">Classic Manicure<span class="desc">Shape, cuticle care, polish</span></div><span class="service-dots"></span><span class="service-price">$25</span></div>
+      <div class="service-row"><div class="service-name">Gel Manicure<span class="desc">Long-lasting, chip-resistant gel</span></div><span class="service-dots"></span><span class="service-price">$35</span></div>
+      <div class="service-row"><div class="service-name">French Manicure<span class="desc">The timeless classic</span></div><span class="service-dots"></span><span class="service-price">$30</span></div>
+      <div class="service-row"><div class="service-name">Spa Manicure<span class="desc">Includes hand massage and exfoliation</span></div><span class="service-dots"></span><span class="service-price">$40</span></div>
+      <div class="service-row"><div class="service-name">Paraffin Manicure<span class="desc">Warm wax treatment for soft hands</span></div><span class="service-dots"></span><span class="service-price">$45</span></div>
+    </div>
+
+    <div class="service-group">
+      <div class="group-title">Pedicures</div>
+      <div class="service-row"><div class="service-name">Classic Pedicure<span class="desc">Soak, scrub, shape, polish</span></div><span class="service-dots"></span><span class="service-price">$35</span></div>
+      <div class="service-row"><div class="service-name">Gel Pedicure<span class="desc">Vibrant gel that lasts weeks</span></div><span class="service-dots"></span><span class="service-price">$45</span></div>
+      <div class="service-row"><div class="service-name">Spa Pedicure<span class="desc">Extended massage and mask</span></div><span class="service-dots"></span><span class="service-price">$55</span></div>
+      <div class="service-row"><div class="service-name">Paraffin Pedicure<span class="desc">Warm wax treatment for tired feet</span></div><span class="service-dots"></span><span class="service-price">$60</span></div>
+      <div class="service-row"><div class="service-name">Deluxe Pedicure<span class="desc">The full pampering experience</span></div><span class="service-dots"></span><span class="service-price">$75</span></div>
+    </div>
+
+    <div class="service-group">
+      <div class="group-title">Extensions &amp; Enhancements</div>
+      <div class="service-row"><div class="service-name">Acrylic Full Set<span class="desc">Strong, sculpted extensions</span></div><span class="service-dots"></span><span class="service-price">$50</span></div>
+      <div class="service-row"><div class="service-name">Acrylic Fill<span class="desc">2–3 week refresh</span></div><span class="service-dots"></span><span class="service-price">$35</span></div>
+      <div class="service-row"><div class="service-name">Dip Powder Set<span class="desc">Lightweight, durable, no UV</span></div><span class="service-dots"></span><span class="service-price">$45</span></div>
+      <div class="service-row"><div class="service-name">Dip Powder Fill<span class="desc">Maintenance for dip nails</span></div><span class="service-dots"></span><span class="service-price">$30</span></div>
+      <div class="service-row"><div class="service-name">Hard Gel Extensions<span class="desc">Flexible, natural-looking length</span></div><span class="service-dots"></span><span class="service-price">$60</span></div>
+    </div>
+
+    <div class="service-group">
+      <div class="group-title">Nail Art</div>
+      <div class="service-row"><div class="service-name">French Tips<span class="desc">Crisp white or color tip</span></div><span class="service-dots"></span><span class="service-price">$10</span></div>
+      <div class="service-row"><div class="service-name">Ombre / Baby Boomer<span class="desc">Soft gradient blend</span></div><span class="service-dots"></span><span class="service-price">$15</span></div>
+      <div class="service-row"><div class="service-name">Chrome Finish<span class="desc">Mirror-shine effect</span></div><span class="service-dots"></span><span class="service-price">$15</span></div>
+      <div class="service-row"><div class="service-name">Custom Hand-Painted Art<span class="desc">Per nail, designer's choice</span></div><span class="service-dots"></span><span class="service-price">$5+</span></div>
+      <div class="service-row"><div class="service-name">Rhinestones &amp; Charms<span class="desc">Bling for the bold</span></div><span class="service-dots"></span><span class="service-price">$3+</span></div>
+    </div>
+
+    <div class="service-group">
+      <div class="group-title">Add-Ons &amp; Care</div>
+      <div class="service-row"><div class="service-name">Polish Change — Hands<span class="desc">Quick refresh, no manicure</span></div><span class="service-dots"></span><span class="service-price">$15</span></div>
+      <div class="service-row"><div class="service-name">Polish Change — Feet<span class="desc">Refresh those toes</span></div><span class="service-dots"></span><span class="service-price">$20</span></div>
+      <div class="service-row"><div class="service-name">Nail Repair<span class="desc">Per nail</span></div><span class="service-dots"></span><span class="service-price">$5</span></div>
+      <div class="service-row"><div class="service-name">Soak-Off Removal<span class="desc">Gel, acrylic, or dip</span></div><span class="service-dots"></span><span class="service-price">$15</span></div>
+      <div class="service-row"><div class="service-name">Cuticle Treatment<span class="desc">Restore and condition</span></div><span class="service-dots"></span><span class="service-price">$10</span></div>
+    </div>
+
+    <a class="book-cta" href="services.html">Book Your Appointment</a>
+  </div>
+</section>
+
+<script src="firebase-config.js"></script>
+<script src="auth-nav.js"></script>
+<script>
+firebase.auth().onAuthStateChanged(user => {
+  if(user && isAdminEmail(user.email)){
+    document.getElementById("adminLink").innerHTML =
+      '<a href="admin.html">admin hax</a>';
+  } else {
+    document.getElementById("adminLink").innerHTML = "";
+  }
+});
+</script>
+
+<footer style="background:#0a0a0b; padding:25px 20px; text-align:center; color:#666; font-size:13px; border-top:1px solid #2a2a2c; margin-top:40px;">
+  &copy; 2026 <span style="color:gold;">Nails by Trin</span> &middot; Made by <span style="color:gold;">Archea.inc</span>
+</footer>
+
+</body>
+</html>
