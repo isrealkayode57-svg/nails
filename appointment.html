@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Book Appointment</title>
+
+<style>
+body { margin:0; background:#0f0f10; color:white; font-family:Arial; }
+
+nav {
+  display:flex; justify-content:space-between;
+  padding:15px 50px;
+  background:#141416;
+}
+
+.nav-links a { margin:0 12px; color:white; text-decoration:none; }
+
+.logo img { height:50px; }
+
+main { padding:20px 50px; }
+
+input { display:block; margin:10px 0; padding:10px; width:300px; }
+
+button { padding:10px 20px; background:gold; border:none; cursor:pointer; }
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">
+    <a href="index.html">
+      <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/nail-tech-logo-%281%29-design-template-10982053ba8b9b5f1ef10670c9d40346_screen.jpg?ts=1690067431">
+    </a>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="services.html">Book</a>
+    <a href="bookings.html">My Bookings</a>
+    <span id="authNav"></span>
+  </div>
+</nav>
+
+<main>
+<h2>Book</h2>
+
+<input id="date" type="date">
+<input id="time" type="time">
+
+<button onclick="confirm()">Confirm Booking</button>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth-nav.js"></script>
+
+<script>
+const db = firebase.database();
+const auth = firebase.auth();
+let currentUser = null;
+let service = localStorage.getItem("selectedService");
+
+auth.onAuthStateChanged(user => { currentUser = user; });
+
+function confirm(){
+  if(!currentUser){
+    alert("Please log in to book an appointment");
+    window.location = "login.html";
+    return;
+  }
+
+  db.ref("bookings").push({
+    service: service,
+    date: date.value,
+    time: time.value,
+    user: currentUser.displayName || currentUser.email,
+    userId: currentUser.uid
+  }).then(() => {
+    alert("Booked!");
+  }).catch(err => {
+    alert("Could not save booking: " + err.message);
+  });
+}
+</script>
+
+<footer style="background:#0a0a0b; padding:25px 20px; text-align:center; color:#666; font-size:13px; border-top:1px solid #2a2a2c; margin-top:40px;">
+  &copy; 2026 <span style="color:gold;">Nails by Trin</span> &middot; Made by <span style="color:gold;">Archea.inc</span>
+</footer>
+
+</body>
+</html>
