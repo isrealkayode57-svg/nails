@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Admin</title>
+
+<style>
+body { margin:0; background:#0f0f10; color:white; font-family:Arial; }
+
+nav {
+  display:flex; justify-content:space-between;
+  padding:15px 50px;
+  background:#141416;
+}
+
+.nav-links a { margin:0 12px; color:white; text-decoration:none; }
+
+.logo img { height:50px; }
+
+main { padding:20px 50px; }
+
+h1 { margin-top:0; }
+
+h2.section-h {
+  margin-top:40px;
+  padding-bottom:8px;
+  border-bottom:2px solid gold;
+  font-size:22px;
+  letter-spacing:1px;
+}
+
+.summary {
+  display:flex; gap:15px;
+  margin-bottom:25px;
+}
+
+.stat {
+  background:#1a1a1c;
+  padding:15px 20px;
+  border-top:3px solid gold;
+  flex:1;
+}
+
+.stat .num { font-size:28px; font-weight:bold; color:gold; }
+.stat .lbl { color:#aaa; font-size:13px; text-transform:uppercase; margin-top:4px; }
+
+.day-group { margin-bottom:25px; }
+
+.day-header {
+  font-size:18px;
+  padding:8px 0;
+  border-bottom:1px solid #333;
+  margin-bottom:10px;
+  color:gold;
+}
+
+.card {
+  background:#1a1a1c;
+  margin:8px 0;
+  padding:15px;
+  border-left:4px solid gold;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+
+.card .info b { font-size:16px; }
+.card .info .meta { color:#bbb; font-size:14px; margin-top:4px; }
+
+.delete, .edit {
+  border:1px solid;
+  padding:6px 12px;
+  cursor:pointer;
+  background:transparent;
+}
+
+.delete { color:#ff8a8a; border-color:#ff8a8a; background:#3a1a1c; }
+.edit { color:gold; border-color:gold; margin-right:6px; }
+
+.empty {
+  background:#1a1a1c;
+  padding:30px;
+  text-align:center;
+  color:#aaa;
+}
+
+.svc-form {
+  background:#1a1a1c;
+  padding:20px;
+  border-top:3px solid gold;
+  margin-bottom:20px;
+}
+
+.svc-form-row {
+  display:grid;
+  grid-template-columns: 1.5fr 1fr 1fr 2fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+.svc-img-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+  padding-bottom:14px;
+  border-bottom:1px dashed #2a2a2c;
+}
+
+.svc-img-preview {
+  width:70px; height:70px;
+  background:#0f0f10 center/cover no-repeat;
+  border:1px solid #333;
+  flex-shrink:0;
+}
+
+.svc-img-preview.empty {
+  background:#0f0f10;
+  display:flex; align-items:center; justify-content:center;
+  color:#444; font-size:11px; text-align:center;
+}
+
+.svc-img-row label.file-btn {
+  background:#333; color:white; padding:8px 14px; cursor:pointer;
+  display:inline-block;
+}
+.svc-img-row label.file-btn:hover { background:#444; }
+.svc-img-row input[type=file] { display:none; }
+.svc-img-row .remove-img {
+  background:transparent; color:#ff8a8a; border:1px solid #ff8a8a;
+  padding:7px 12px; cursor:pointer;
+}
+
+.svc-row .thumb {
+  width:50px; height:50px;
+  background:#0f0f10 center/cover no-repeat;
+  border:1px solid #333;
+  flex-shrink:0;
+}
+
+.svc-form label { display:block; font-size:12px; color:#aaa; text-transform:uppercase; margin-bottom:4px; letter-spacing:1px; }
+
+.svc-form input, .svc-form select {
+  width:100%; box-sizing:border-box;
+  padding:9px; background:#0f0f10; color:white; border:1px solid #333;
+}
+
+.svc-form .btns { display:flex; gap:6px; }
+.svc-form button {
+  padding:10px 14px;
+  background:gold; color:black; border:none; cursor:pointer; font-weight:bold; white-space:nowrap;
+}
+.svc-form button.cancel { background:#333; color:white; }
+
+.starter-btn {
+  display:block;
+  margin:20px 0;
+  padding:12px 20px;
+  background:gold; color:black; border:none; cursor:pointer; font-weight:bold;
+}
+
+.svc-cat { margin-bottom:20px; }
+.svc-cat-title {
+  color:gold; text-transform:uppercase; letter-spacing:2px;
+  font-size:14px; margin:10px 0; border-bottom:1px solid #2a2a2c; padding-bottom:6px;
+}
+
+.svc-row {
+  background:#1a1a1c; margin:5px 0; padding:10px 15px;
+  display:flex; justify-content:space-between; align-items:center; gap:15px;
+}
+.svc-row .info b { font-size:15px; }
+.svc-row .info .desc { color:#888; font-size:13px; margin-top:2px; }
+.svc-row .price { color:gold; font-weight:bold; min-width:60px; text-align:right; }
+.svc-row .actions { display:flex; }
+
+@media (max-width:900px){
+  .svc-form { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+  <div class="logo">
+    <a href="index.html">
+      <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/nail-tech-logo-%281%29-design-template-10982053ba8b9b5f1ef10670c9d40346_screen.jpg?ts=1690067431">
+    </a>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="services.html">Services</a>
+    <a href="services.html">Book</a>
+    <a href="bookings.html">My Bookings</a>
+    <a href="admin.html">Admin</a>
+    <span id="authNav"></span>
+  </div>
+</nav>
+
+<main>
+<h1>Admin Dashboard</h1>
+
+<div class="summary">
+  <div class="stat"><div class="num" id="statTotal">0</div><div class="lbl">Total Bookings</div></div>
+  <div class="stat"><div class="num" id="statUpcoming">0</div><div class="lbl">Upcoming</div></div>
+  <div class="stat"><div class="num" id="statToday">0</div><div class="lbl">Today</div></div>
+</div>
+
+<h2 class="section-h">Manage Services</h2>
+
+<div class="svc-form">
+  <div class="svc-img-row">
+    <div id="svcImgPreview" class="svc-img-preview empty">No photo</div>
+    <label class="file-btn">
+      Choose Photo
+      <input type="file" id="svcImgInput" accept="image/*">
+    </label>
+    <button type="button" class="remove-img" id="svcImgRemoveBtn" onclick="clearServiceImage()" style="display:none">Remove</button>
+    <span style="color:#888; font-size:13px;">Optional. Photos are auto-resized.</span>
+  </div>
+  <div class="svc-form-row">
+    <div>
+      <label>Name</label>
+      <input id="svcName" placeholder="e.g. Gel Manicure">
+    </div>
+    <div>
+      <label>Price</label>
+      <input id="svcPrice" placeholder="e.g. $35">
+    </div>
+    <div>
+      <label>Category</label>
+      <input id="svcCategory" list="categoryList" placeholder="e.g. Manicures">
+      <datalist id="categoryList"></datalist>
+    </div>
+    <div>
+      <label>Description</label>
+      <input id="svcDesc" placeholder="Short description (optional)">
+    </div>
+    <div class="btns">
+      <button id="svcSaveBtn" onclick="saveService()">Add</button>
+      <button class="cancel" id="svcCancelBtn" onclick="resetServiceForm()" style="display:none">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="servicesList"></div>
+
+<h2 class="section-h">Bookings</h2>
+<div id="bookingsList"></div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="auth-nav.js"></script>
+
+<script>
+const db = firebase.database();
+const auth = firebase.auth();
+const bookingsList = document.getElementById("bookingsList");
+const servicesList = document.getElementById("servicesList");
+
+const CATEGORY_ORDER = ["Manicures", "Pedicures", "Extensions & Enhancements", "Nail Art", "Add-Ons & Care"];
+
+const DEFAULT_SERVICES = [
+  { name:"Classic Manicure", description:"Shape, cuticle care, polish", price:"$25", category:"Manicures" },
+  { name:"Gel Manicure", description:"Long-lasting, chip-resistant gel", price:"$35", category:"Manicures" },
+  { name:"French Manicure", description:"The timeless classic", price:"$30", category:"Manicures" },
+  { name:"Spa Manicure", description:"Includes hand massage and exfoliation", price:"$40", category:"Manicures" },
+  { name:"Paraffin Manicure", description:"Warm wax treatment for soft hands", price:"$45", category:"Manicures" },
+  { name:"Classic Pedicure", description:"Soak, scrub, shape, polish", price:"$35", category:"Pedicures" },
+  { name:"Gel Pedicure", description:"Vibrant gel that lasts weeks", price:"$45", category:"Pedicures" },
+  { name:"Spa Pedicure", description:"Extended massage and mask", price:"$55", category:"Pedicures" },
+  { name:"Paraffin Pedicure", description:"Warm wax treatment for tired feet", price:"$60", category:"Pedicures" },
+  { name:"Deluxe Pedicure", description:"The full pampering experience", price:"$75", category:"Pedicures" },
+  { name:"Acrylic Full Set", description:"Strong, sculpted extensions", price:"$50", category:"Extensions & Enhancements" },
+  { name:"Acrylic Fill", description:"2–3 week refresh", price:"$35", category:"Extensions & Enhancements" },
+  { name:"Dip Powder Set", description:"Lightweight, durable, no UV", price:"$45", category:"Extensions & Enhancements" },
+  { name:"Dip Powder Fill", description:"Maintenance for dip nails", price:"$30", category:"Extensions & Enhancements" },
+  { name:"Hard Gel Extensions", description:"Flexible, natural-looking length", price:"$60", category:"Extensions & Enhancements" },
+  { name:"French Tips", description:"Crisp white or color tip", price:"$10", category:"Nail Art" },
+  { name:"Ombre / Baby Boomer", description:"Soft gradient blend", price:"$15", category:"Nail Art" },
+  { name:"Chrome Finish", description:"Mirror-shine effect", price:"$15", category:"Nail Art" },
+  { name:"Custom Hand-Painted Art", description:"Per nail, designer's choice", price:"$5+", category:"Nail Art" },
+  { name:"Rhinestones & Charms", description:"Bling for the bold", price:"$3+", category:"Nail Art" },
+  { name:"Polish Change — Hands", description:"Quick refresh, no manicure", price:"$15", category:"Add-Ons & Care" },
+  { name:"Polish Change — Feet", description:"Refresh those toes", price:"$20", category:"Add-Ons & Care" },
+  { name:"Nail Repair", description:"Per nail", price:"$5", category:"Add-Ons & Care" },
+  { name:"Soak-Off Removal", description:"Gel, acrylic, or dip", price:"$15", category:"Add-Ons & Care" },
+  { name:"Cuticle Treatment", description:"Restore and condition", price:"$10", category:"Add-Ons & Care" }
+];
+
+let editingId = null;
+let currentMaxOrder = 0;
+let currentImage = "";
+
+document.getElementById("svcImgInput").addEventListener("change", e => {
+  let file = e.target.files[0];
+  if(!file) return;
+  resizeImage(file, 700, dataUrl => {
+    currentImage = dataUrl;
+    showImagePreview(dataUrl);
+  });
+  e.target.value = "";
+});
+
+function resizeImage(file, maxDim, callback){
+  let img = new Image();
+  let reader = new FileReader();
+  reader.onload = ev => {
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if(w > h){ if(w > maxDim){ h = h * (maxDim/w); w = maxDim; } }
+      else { if(h > maxDim){ w = w * (maxDim/h); h = maxDim; } }
+      let canvas = document.createElement("canvas");
+      canvas.width = Math.round(w); canvas.height = Math.round(h);
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL("image/jpeg", 0.82));
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function showImagePreview(url){
+  let p = document.getElementById("svcImgPreview");
+  if(url){
+    p.classList.remove("empty");
+    p.innerText = "";
+    p.style.backgroundImage = `url("${url}")`;
+    document.getElementById("svcImgRemoveBtn").style.display = "inline-block";
+  } else {
+    p.classList.add("empty");
+    p.innerText = "No photo";
+    p.style.backgroundImage = "";
+    document.getElementById("svcImgRemoveBtn").style.display = "none";
+  }
+}
+
+function clearServiceImage(){
+  currentImage = "";
+  showImagePreview("");
+}
+
+auth.onAuthStateChanged(user => {
+  if(!user || !isAdminEmail(user.email)){
+    alert("No access");
+    window.location = "index.html";
+    return;
+  }
+  watchBookings();
+  watchServices();
+});
+
+/* ----- Bookings ----- */
+function watchBookings(){
+  db.ref("bookings").on("value", snap => renderBookings(snap.val() || {}));
+}
+
+function formatDateLabel(dateStr){
+  if(!dateStr) return "No date";
+  let d = new Date(dateStr + "T00:00:00");
+  if(isNaN(d)) return dateStr;
+  return d.toLocaleDateString(undefined, { weekday:"long", month:"long", day:"numeric", year:"numeric" });
+}
+
+function todayStr(){
+  let t = new Date();
+  return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;
+}
+
+function renderBookings(data){
+  let entries = Object.entries(data);
+  let total = entries.length;
+  let today = todayStr();
+  let upcoming = entries.filter(([_,b]) => (b.date || "") >= today).length;
+  let todayCount = entries.filter(([_,b]) => b.date === today).length;
+
+  document.getElementById("statTotal").innerText = total;
+  document.getElementById("statUpcoming").innerText = upcoming;
+  document.getElementById("statToday").innerText = todayCount;
+
+  if(total === 0){ bookingsList.innerHTML = `<div class="empty">No bookings yet.</div>`; return; }
+
+  let groups = {};
+  for(let [id, b] of entries){
+    let key = b.date || "no-date";
+    (groups[key] = groups[key] || []).push({id, ...b});
+  }
+
+  bookingsList.innerHTML = "";
+  for(let date of Object.keys(groups).sort()){
+    let group = groups[date].sort((a,b) => (a.time || "").localeCompare(b.time || ""));
+    let section = document.createElement("div");
+    section.className = "day-group";
+    section.innerHTML = `<div class="day-header">${formatDateLabel(date)} <span style="color:#888; font-size:14px; font-weight:normal;">(${group.length})</span></div>`;
+    for(let b of group){
+      let card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="info">
+          <b>${b.service || "Appointment"}</b>
+          <div class="meta">${b.time ? b.time + " • " : ""}${b.user || "Unknown"}</div>
+        </div>
+        <button class="delete">Delete</button>
+      `;
+      card.querySelector(".delete").addEventListener("click", () => deleteBooking(b.id, b.service, b.user));
+      section.appendChild(card);
+    }
+    bookingsList.appendChild(section);
+  }
+}
+
+function deleteBooking(id, service, user){
+  if(!window.confirm(`Delete ${service || "this booking"} for ${user || "this user"}?`)) return;
+  db.ref("bookings/" + id).remove();
+}
+
+/* ----- Services ----- */
+function watchServices(){
+  db.ref("services").on("value", snap => renderServices(snap.val() || {}));
+}
+
+function groupServices(data){
+  let groups = {};
+  Object.entries(data).forEach(([id, s]) => {
+    let cat = s.category || "Other";
+    (groups[cat] = groups[cat] || []).push({id, ...s});
+  });
+  Object.values(groups).forEach(arr => arr.sort((a,b) => (a.order||0) - (b.order||0) || a.name.localeCompare(b.name)));
+  let ordered = [];
+  CATEGORY_ORDER.forEach(c => { if(groups[c]) ordered.push([c, groups[c]]); });
+  Object.keys(groups).filter(c => !CATEGORY_ORDER.includes(c)).sort().forEach(c => ordered.push([c, groups[c]]));
+  return ordered;
+}
+
+function renderServices(data){
+  let entries = Object.entries(data);
+  currentMaxOrder = entries.reduce((m, [_,s]) => Math.max(m, s.order || 0), 0);
+
+  // Update category datalist
+  let cats = new Set(CATEGORY_ORDER);
+  entries.forEach(([_,s]) => { if(s.category) cats.add(s.category); });
+  document.getElementById("categoryList").innerHTML =
+    Array.from(cats).map(c => `<option value="${c}">`).join("");
+
+  servicesList.innerHTML = "";
+
+  if(entries.length === 0){
+    servicesList.innerHTML = `
+      <div class="empty">
+        No services yet.
+        <button class="starter-btn" onclick="loadStarterServices()" style="margin:15px auto 0;">Load 25 Starter Services</button>
+      </div>
+    `;
+    return;
+  }
+
+  for(let [cat, items] of groupServices(data)){
+    let section = document.createElement("div");
+    section.className = "svc-cat";
+    section.innerHTML = `<div class="svc-cat-title">${cat} (${items.length})</div>`;
+    for(let s of items){
+      let row = document.createElement("div");
+      row.className = "svc-row";
+      let thumbStyle = s.image ? `style="background-image:url('${s.image}')"` : "";
+      row.innerHTML = `
+        <div class="thumb" ${thumbStyle}></div>
+        <div class="info" style="flex:1;">
+          <b>${s.name}</b>
+          ${s.description ? `<div class="desc">${s.description}</div>` : ""}
+        </div>
+        <div class="price">${s.price || ""}</div>
+        <div class="actions">
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      `;
+      row.querySelector(".edit").addEventListener("click", () => editService(s.id, s));
+      row.querySelector(".delete").addEventListener("click", () => deleteService(s.id, s.name));
+      section.appendChild(row);
+    }
+    servicesList.appendChild(section);
+  }
+}
+
+function saveService(){
+  let name = document.getElementById("svcName").value.trim();
+  let price = document.getElementById("svcPrice").value.trim();
+  let category = document.getElementById("svcCategory").value.trim() || "Other";
+  let description = document.getElementById("svcDesc").value.trim();
+
+  if(!name || !price){ alert("Name and price are required."); return; }
+
+  let payload = { name, price, category, description, image: currentImage || "" };
+
+  if(editingId){
+    db.ref("services/" + editingId).update(payload).then(resetServiceForm);
+  } else {
+    payload.order = currentMaxOrder + 1;
+    db.ref("services").push(payload).then(resetServiceForm);
+  }
+}
+
+function editService(id, s){
+  editingId = id;
+  document.getElementById("svcName").value = s.name || "";
+  document.getElementById("svcPrice").value = s.price || "";
+  document.getElementById("svcCategory").value = s.category || "";
+  document.getElementById("svcDesc").value = s.description || "";
+  currentImage = s.image || "";
+  showImagePreview(currentImage);
+  document.getElementById("svcSaveBtn").innerText = "Save Changes";
+  document.getElementById("svcCancelBtn").style.display = "inline-block";
+  window.scrollTo({ top: document.querySelector(".svc-form").offsetTop - 80, behavior:"smooth" });
+}
+
+function resetServiceForm(){
+  editingId = null;
+  document.getElementById("svcName").value = "";
+  document.getElementById("svcPrice").value = "";
+  document.getElementById("svcCategory").value = "";
+  document.getElementById("svcDesc").value = "";
+  currentImage = "";
+  showImagePreview("");
+  document.getElementById("svcSaveBtn").innerText = "Add";
+  document.getElementById("svcCancelBtn").style.display = "none";
+}
+
+function deleteService(id, name){
+  if(!window.confirm(`Delete "${name}"? This won't affect existing bookings.`)) return;
+  db.ref("services/" + id).remove();
+}
+
+function loadStarterServices(){
+  if(!window.confirm("Add the 25 starter services to your menu?")) return;
+  let updates = {};
+  DEFAULT_SERVICES.forEach((s, i) => {
+    let id = db.ref("services").push().key;
+    updates["services/" + id] = { ...s, order: i + 1 };
+  });
+  db.ref().update(updates);
+}
+</script>
+
+<footer style="background:#0a0a0b; padding:25px 20px; text-align:center; color:#666; font-size:13px; border-top:1px solid #2a2a2c; margin-top:40px;">
+  &copy; 2026 <span style="color:gold;">Nails by Trin</span> &middot; Made by <span style="color:gold;">Archea.inc</span>
+</footer>
+
+</body>
+</html>
